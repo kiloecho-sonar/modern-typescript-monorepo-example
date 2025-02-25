@@ -119,7 +119,7 @@ jobs:
           .\.sonar\scanner\sonar-scanner /d:sonar.projectName="modern-typescript-monorepo-example_1" /d:sonar.projectKey="kiloecho-sonar_modern-typescript-monorepo-example_1" /d:sources=./packages/typescript-example-1 /d:sonar.host.url="${{ secrets.SONAR_HOST_URL }}"
           /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
       - name: Build and analyze typescript-example-2
-        if: steps.changed-files.outputs.any_changed == 'true' && contains(steps.changed-files.outputs.all_changed_files, 'dotnet-xunit-coverlet')
+        if: steps.changed-files.outputs.any_changed == 'true' && contains(steps.changed-files.outputs.all_changed_files, 'packages/typescript-example-2')
         shell: powershell
         run: |
           .\.sonar\scanner\sonar-scanner /d:sonar.projectName="modern-typescript-monorepo-example_2" /d:sonar.projectKey="kiloecho-sonar_modern-typescript-monorepo-example_2" /d:sources=./packages/typescript-example-1 /d:sonar.host.url="${{ secrets.SONAR_HOST_URL }}"
