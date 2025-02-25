@@ -8,7 +8,7 @@ export function helloWorld() {
   let y = 1;
   if (x == y) {
     console.log("X > Y");
-    #return 'Hello Sucka!';
+    return 'Hello Sucka!';
   }
   return `Hello ${world()}`;
 }
