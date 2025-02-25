@@ -4,22 +4,45 @@ on:
   push:
     branches:
       - main
+    paths:
+      - 'packages/typescript-example-1/**'
+      - 'packages/typescript-example-2/**'
   pull_request:
     types: [opened, synchronize, reopened]
+    paths:
+      - 'packages/typescript-example-1/**'
+      - 'packages/typescript-example-2/**'
 
 jobs:
-  build:
-    name: Build and analyze
+  build-typescript-example-1:
+    if: contains(github.event.head_commit.message, 'packages/typescript-example-1')
+    name: Build and analyze typescript-example-1
     runs-on: ubuntu-latest
     
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+          fetch-depth: 0
       - uses: SonarSource/sonarqube-scan-action@v4
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+      # Additional steps for typescript-example-1
+
+  build-typescript-example-2:
+    if: contains(github.event.head_commit.message, 'packages/typescript-example-2')
+    name: Build and analyze typescript-example-2
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: SonarSource/sonarqube-scan-action@v4
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+      # Additional steps for typescript-example-2
       # If you wish to fail your job when the Quality Gate is red, uncomment the
       # following lines. This would typically be used to fail a deployment.
       # We do not recommend to use this in a pull request. Prefer using pull request
