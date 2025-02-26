@@ -61,7 +61,10 @@ on:
 jobs:
   build-and-analyze:
     name: Build and analyze
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
+    env:
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
     
     steps:
       - uses: actions/checkout@v4
@@ -105,7 +108,7 @@ jobs:
         env:
           ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
         run: |
-          echo "One or more files in the .github folder has changed."
+          echo "One or more files in the .github folder have changed."
           echo "List all the files that have changed: $ALL_CHANGED_FILES"
           for file in ${ALL_CHANGED_FILES}; do
             echo "$file was changed"
@@ -114,16 +117,16 @@ jobs:
       # Build and analyze projects depending on project modified (linked to id of changed-files)
       - name: Build and analyze typescript-example-1
         if: steps.changed-files.outputs.any_changed == 'true' && contains(steps.changed-files.outputs.all_changed_files, 'packages/typescript-example-1')
-        shell: powershell
-        run: |
-          .\.sonar\scanner\sonar-scanner /d:sonar.projectName="modern-typescript-monorepo-example_1" /d:sonar.projectKey="kiloecho-sonar_modern-typescript-monorepo-example_1" /d:sources=./packages/typescript-example-1 /d:sonar.host.url="${{ secrets.SONAR_HOST_URL }}"
-          /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
+        uses: SonarSource/sonarqube-scan-action@v4
+        with:
+            args: >
+              -Dsonar.verbose=true -Dsonar.projectName=modern-typescript-monorepo-example_1 -Dsonar.projectKey=kiloecho-sonar_modern-typescript-monorepo-example_1 -Dsonar.sources=./packages/typescript-example-1
       - name: Build and analyze typescript-example-2
         if: steps.changed-files.outputs.any_changed == 'true' && contains(steps.changed-files.outputs.all_changed_files, 'packages/typescript-example-2')
-        shell: powershell
-        run: |
-          .\.sonar\scanner\sonar-scanner /d:sonar.projectName="modern-typescript-monorepo-example_2" /d:sonar.projectKey="kiloecho-sonar_modern-typescript-monorepo-example_2" /d:sources=./packages/typescript-example-1 /d:sonar.host.url="${{ secrets.SONAR_HOST_URL }}"
-          /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
+        uses: SonarSource/sonarqube-scan-action@v4
+        with:
+            args: >
+              -Dsonar.verbose=true -Dsonar.projectName=modern-typescript-monorepo-example_2 -Dsonar.projectKey=kiloecho-sonar_modern-typescript-monorepo-example_2 -Dsonar.sources=./packages/typescript-example-2
       # If you wish to fail your job when the Quality Gate is red, uncomment the
       # following lines. This would typically be used to fail a deployment.
       # We do not recommend to use this in a pull request. Prefer using pull request
