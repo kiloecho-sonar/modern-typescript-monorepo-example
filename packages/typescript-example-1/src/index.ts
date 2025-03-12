@@ -6,3 +6,10 @@ import { world } from "@mme/typescript-example-2";
 export function helloWorld() {
   return `Hello ${world()}`;
 }
+
+/**
+ * Hello Sky
+ */
+export function helloSky() {
+  console.log("hello sky");
+}
